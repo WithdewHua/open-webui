@@ -429,10 +429,7 @@ async def generate_chat_completion(
     if is_o1 and payload["messages"][0]["role"] == "system":
         payload["messages"][0]["role"] = "user"
 
-    # Convert the modified body back to JSON
-    payload = json.dumps(payload)
-
-    log.debug(payload)
+    log.debug(f"{payload=}")
 
     headers = {}
     headers["Authorization"] = f"Bearer {key}"
@@ -453,7 +450,7 @@ async def generate_chat_completion(
         r = await session.request(
             method="POST",
             url=f"{url}/chat/completions",
-            data=payload,
+            data=json.dumps(payload),
             headers=headers,
         )
 

@@ -458,7 +458,7 @@ async def generate_chat_completion(
         )
 
         # Check if response is SSE
-        if "text/event-stream" in r.headers.get("Content-Type", ""):
+        if "text/event-stream" in r.headers.get("Content-Type", "") or payload.get("stream", False):
             streaming = True
             return StreamingResponse(
                 r.content,

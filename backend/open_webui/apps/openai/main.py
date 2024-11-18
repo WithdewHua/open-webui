@@ -457,10 +457,13 @@ async def generate_chat_completion(
         # Check if response is SSE
         if "text/event-stream" in r.headers.get("Content-Type", "") or payload.get("stream", False):
             streaming = True
+            headers = dict(r.headers)
+            if not headers.get("Content-Type"):
+                headers["Content-Type"] = "text/event-stream"
             return StreamingResponse(
                 r.content,
                 status_code=r.status,
-                headers=dict(r.headers),
+                headers=headers,
                 background=BackgroundTask(
                     cleanup_response, response=r, session=session
                 ),
